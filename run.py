@@ -26,7 +26,7 @@ def search_book(page):
     print("-----", page, "PAGE ------")
     is_title = True
     for book in books:        
-        if(is_title == True):
+        if is_title == True:
             titles.append(book.text.replace(',', '，'))
             is_title = False
         else:
@@ -40,11 +40,11 @@ def search_book(page):
     for book in books:
         codes.append(book.get('href').split('code=')[1].strip())
 
-    if(show == True):
+    if show == True:
         for i in range(len(titles)):
             print(titles[i], "-", writers[i], "-", codes[i])
 
-    if(page == 1):
+    if page == 1:
         with open("book.csv", "w", encoding="utf-8") as f:
             f.write("제목, 작성자, 코드\n")
         f.close()
@@ -60,27 +60,29 @@ def search_book(page):
     )
 
     for book in books:
-        if(str(page + 1) == book.text):
+        if str(page + 1) == book.text:
             search_book(page + 1)
             break
-        elif(book.text == ">"):
+        elif book.text == ">":
             search_book(page + 1)
             break
 
 def show_csv():
     csv_data = pd.read_csv("book.csv")
-    csv_data.head()33
+    csv_data.head()
+    print(csv_data)
     
 def main():
-    menu = input("1. 크롤링 - 처리 과정 표시\n2. 크롤링 처리 과정 표시 x\n3. csv 표시\n > ")
-
-    if(input == 1):
+    menu = int(input("1. 크롤링 - 처리 과정 표시\n2. 크롤링 처리 과정 표시 x\n3. csv 표시\n > "))
+    
+    if menu == 1:
+        global show
         show = True
         search_book(1)
-    elif(input == 2):
-        show = False
-        search_book(2)
+    elif menu == 2:
+        search_book(1)
     else:
         show_csv()
 
 main()
+
